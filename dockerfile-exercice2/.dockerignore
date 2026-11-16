@@ -10,6 +10,10 @@ dist
 Dockerfile*
 .dockerignore
 *.md
+docker-compose*.yml
+compose*.yaml
+rapport.pdf
+tp-securite
 
 # Secrets et configuration locale : ne doivent jamais entrer dans une image
 .env
