@@ -1,0 +1,24 @@
+# ---------- Étape 1 : build avec l'image Node DHI "dev" (contient npm et un shell) ----------
+FROM dhi.io/node:22-alpine3.24-dev@sha256:55a3bbae91f21a08ae5769898c4601c5bb075c7dbc4836fd6fea8510c5cb8d63 AS build
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build
+
+
+# ---------- Étape 2 : image finale nginx DHI (runtime, non-root UID 65532, port 8080) ----------
+FROM dhi.io/nginx:1.31-alpine3.24@sha256:34c5f1f63c57c0fb1b52505aecbb213520e15918dc822eb16371edff5183cbd1
+
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# Déjà le défaut de l'image DHI, rendu explicite
+USER 65532
+
+EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=3s --retries=3 \
+  CMD wget -q --spider http://127.0.0.1:8080/ || exit 1

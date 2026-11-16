@@ -1,0 +1,23 @@
+# Historique Git : inutile dans l'image, peut contenir des secrets supprimés depuis
+.git
+.gitignore
+
+# Dépendances et build locaux : ils sont refaits proprement dans l'image
+node_modules
+dist
+
+# Fichiers Docker et documentation : inutiles pour construire l'appli
+Dockerfile*
+.dockerignore
+*.md
+
+# Secrets et configuration locale : ne doivent jamais entrer dans une image
+.env
+.env.*
+*.pem
+*.key
+
+# Fichiers de sauvegarde : Vite copie public/ tel quel dans dist/, ils seraient servis en ligne
+**/*.old
+**/*.bak
+**/*~

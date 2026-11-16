@@ -1,0 +1,47 @@
+$ grep FROM Dockerfile.initial
+FROM node:22
+
+$ docker exec quiz-initial cat /etc/os-release | head -2
+PRETTY_NAME="Debian GNU/Linux 12 (bookworm)"
+NAME="Debian GNU/Linux"
+
+$ docker exec quiz-initial ps -o user,pid,cmd
+USER         PID CMD
+root           1 node /usr/local/bin/serve -s dist
+root          37 ps -o user,pid,cmd
+
+$ docker image inspect quiz-docker:initial --format User
+User: ""
+
+$ docker images quiz-docker:initial
+REPOSITORY:TAG        SIZE
+quiz-docker:initial   1.69GB
+
+$ docker history quiz-docker:initial
+IMAGE          CREATED         CREATED BY                                      SIZE      COMMENT
+4002f3776121   3 minutes ago   CMD ["serve" "-s" "dist"]                       0B        buildkit.dockerfile.v0
+<missing>      3 minutes ago   EXPOSE [3000/tcp]                               0B        buildkit.dockerfile.v0
+<missing>      3 minutes ago   RUN /bin/sh -c npm install   && npm install …   48.7MB    buildkit.dockerfile.v0
+<missing>      3 minutes ago   COPY . . # buildkit                             283kB     buildkit.dockerfile.v0
+<missing>      3 minutes ago   WORKDIR /app                                    8.19kB    buildkit.dockerfile.v0
+<missing>      4 days ago      CMD ["node"]                                    0B        buildkit.dockerfile.v0
+<missing>      4 days ago      ENTRYPOINT ["docker-entrypoint.sh"]             0B        buildkit.dockerfile.v0
+<missing>      4 days ago      COPY docker-entrypoint.sh /usr/local/bin/ # …   20.5kB    buildkit.dockerfile.v0
+<missing>      4 days ago      RUN /bin/sh -c set -ex   && export GNUPGHOME…   5.41MB    buildkit.dockerfile.v0
+<missing>      4 days ago      ENV YARN_VERSION=1.22.22                        0B        buildkit.dockerfile.v0
+<missing>      4 days ago      RUN /bin/sh -c ARCH= && dpkgArch="$(dpkg --p…   213MB     buildkit.dockerfile.v0
+<missing>      4 days ago      ENV NODE_VERSION=22.23.5                        0B        buildkit.dockerfile.v0
+<missing>      4 days ago      RUN /bin/sh -c groupadd --gid 1000 node   &&…   69.6kB    buildkit.dockerfile.v0
+<missing>      11 days ago     RUN /bin/sh -c set -ex;  apt-get update;  ap…   619MB     buildkit.dockerfile.v0
+<missing>      11 days ago     RUN /bin/sh -c set -eux;  apt-get update;  a…   194MB     buildkit.dockerfile.v0
+<missing>      11 days ago     RUN /bin/sh -c set -eux;  apt-get update;  a…   51.5MB    buildkit.dockerfile.v0
+<missing>      11 days ago     # debian.sh --arch 'amd64' out/ 'bookworm' '…   133MB     debuerreotype 0.17
+
+$ outils de dev présents dans l image
+gcc make git curl wget python3 apt ssh perl 
+
+$ nombre de paquets Debian installés
+413
+
+$ node_modules présents ?
+16M	/app/node_modules
